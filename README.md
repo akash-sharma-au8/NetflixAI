@@ -2,6 +2,12 @@
 
 -create-react-app
 -configured tailwind
+-Header
+-routing
+-LOGIN
+-signIN/SignUp form
+-form validation 
+-useRef Hook
 
 # Features
 -Login/Signup Page
