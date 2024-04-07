@@ -2,7 +2,8 @@ import {React, useState, useRef} from 'react';
 import {useNavigate} from 'react-router-dom';
 import Header from './Header';
 import { validateEmail, validatePassword, validateUserName } from '../utils/validate'
-
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
+import {auth} from '../utils/firebase'
 
 const Login = () => {
 
@@ -11,6 +12,7 @@ const Login = () => {
     const [email, setEmail] =useState("");
     const [password, setPasssword] =useState("");
     const [userName, setUserName] =useState("");
+    const [error, SetError] = useState("")
     const[emailError,setEmailError] =useState(null)
     const[passwordError,setPassswordError] =useState(null)
     const[userNameError,setUserNameError] =useState(null)
@@ -23,16 +25,45 @@ const Login = () => {
         
         if(isSignedIn){
             if(validateEmail(email, setEmailError) && validatePassword(password, setPassswordError)){
-                alert("Login Successful")
-                navigate("/browse")
+                signInWithEmailAndPassword(auth, email, password)
+                    .then((userCredential) => {
+                        // Signed in 
+                        const user = userCredential.user;
+                        if(user){
+                            alert("Login Successful")
+                            navigate("/browse")
+                        }
+                        console.log(user)
+                    })
+                    .catch((error) => {
+                        const errorCode = error.code;
+                        const errorMessage = error.message;
+                        SetError(errorMessage)
+                    });
                 setEmail("")
                 setPasssword("")
             }
         }
         else{
             if(validateEmail(email, setEmailError ) && validatePassword(password, setPassswordError) && validateUserName(userName, setUserNameError)){
-                alert("SignUp Successful")
-                setIsSignedIn(true)
+                createUserWithEmailAndPassword(auth, email, password)
+                    .then((userCredential) => {
+                        // Signed up 
+                        const user = userCredential.user;
+                        if(user){
+                            alert("SignUp Successful")
+                            setIsSignedIn(true)
+                        }
+                        console.log(user)
+                    })
+                    .catch((error) => {
+                        const errorCode = error.code;
+                        const errorMessage = error.message;
+                        SetError(errorMessage)
+                        // ..
+                    });
+                
+               
                 setEmail("")
                 setPasssword("")
                 setUserName("")
@@ -42,6 +73,7 @@ const Login = () => {
     };
 
     const handleToggleSignIn = ()=>{
+        SetError('')
         setIsSignedIn(!isSignedIn)
     };
 
@@ -58,7 +90,7 @@ const Login = () => {
             className=' absolute bg-black p-12 mx-auto left-0 right-0 w-3/12 my-36 text-white bg-opacity-80 rounded-md'>
 
                 <h1 className='text-4xl mb-12'>{ isSignedIn ? "Sign In" : "Sign Up"}</h1>
-
+                {error && <span className='text-red-700'>{error}</span>}
                 {
                 !isSignedIn &&  
                     <>

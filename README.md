@@ -8,6 +8,9 @@
 -signIN/SignUp form
 -form validation 
 -useRef Hook
+-firebse setup
+-firebase Deploy
+-Create Signup in User Account
 
 # Features
 -Login/Signup Page

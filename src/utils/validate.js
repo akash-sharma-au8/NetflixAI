@@ -3,12 +3,11 @@ export const validateEmail = (email, setEmailError) => {
             const isEmail  = /^[a-zA-Z0-9]+@+[a-zA-Z0-9]+.+[A-z]/.test(email)
             if(!isEmail){
                 setEmailError('Email is not valid')
-                return isEmail
             }
             else{
                 setEmailError("")
-                return true
             }
+            return isEmail
         }
         else{
             setEmailError('Please Enter the email');
@@ -21,24 +20,24 @@ export const validatePassword = (password, setPasswordError) => {
         const isPassword  = /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*\W)(?!.* ).{8,16}$/.test(password)
         if(!isPassword){
             setPasswordError('Password is not valid')
-            return false
         }
         else{
             setPasswordError("")
-            return true;
         }
+        return isPassword
     }
     else{
         setPasswordError('Please Enter the password')
+        return false
     }
 }
-export const validateUserName = (userName, setPasswordError) => {
+export const validateUserName = (userName, setUserNameError) => {
         if(userName && userName.length > 0 ){
-            setPasswordError('')
+            setUserNameError('')
             return true;
         }
         else{
-            setPasswordError('Please enter the username')
+            setUserNameError('Please enter the username')
             return false
         }
     }
