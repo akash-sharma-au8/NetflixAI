@@ -1,13 +1,16 @@
-import {React, useState, useRef} from 'react';
+import {React, useState, useRef, useEffect} from 'react';
 import {useNavigate} from 'react-router-dom';
 import Header from './Header';
 import { validateEmail, validatePassword, validateUserName } from '../utils/validate'
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
-import {auth} from '../utils/firebase'
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile } from "firebase/auth";
+import {auth} from '../utils/firebase';
+import {addUser} from '../utils/userSlice';
+import{useDispatch} from 'react-redux';
+import { Avatar } from '../utils/constants';
+
 
 const Login = () => {
-
-    const navigate = useNavigate()
+    const dispatch = useDispatch()
     const[isSignedIn, setIsSignedIn] = useState(true)
     const [email, setEmail] =useState("");
     const [password, setPasssword] =useState("");
@@ -17,12 +20,8 @@ const Login = () => {
     const[passwordError,setPassswordError] =useState(null)
     const[userNameError,setUserNameError] =useState(null)
 
-    console.log(email)
     const handleClick = ()=>{
-        setEmailError("")
-        setPassswordError("")
-        setUserNameError("")
-        
+        SetError('')
         if(isSignedIn){
             if(validateEmail(email, setEmailError) && validatePassword(password, setPassswordError)){
                 signInWithEmailAndPassword(auth, email, password)
@@ -30,10 +29,8 @@ const Login = () => {
                         // Signed in 
                         const user = userCredential.user;
                         if(user){
-                            alert("Login Successful")
-                            navigate("/browse")
+                            dispatch(addUser({uid: user.uid, email:user.email, displayName: user.displayName, photoURL: user.photoURL}))
                         }
-                        console.log(user)
                     })
                     .catch((error) => {
                         const errorCode = error.code;
@@ -48,13 +45,17 @@ const Login = () => {
             if(validateEmail(email, setEmailError ) && validatePassword(password, setPassswordError) && validateUserName(userName, setUserNameError)){
                 createUserWithEmailAndPassword(auth, email, password)
                     .then((userCredential) => {
-                        // Signed up 
                         const user = userCredential.user;
                         if(user){
-                            alert("SignUp Successful")
-                            setIsSignedIn(true)
+                            updateProfile(user, {
+                                displayName: userName, photoURL: {Avatar}
+                              }).then(() => {
+                                dispatch(addUser({uid: user.uid, email:user.email, displayName: user.displayName, photoURL: user.photoURL}))
+                               
+                              }).catch((error) => {
+                                 console.error(error.errorMessage)
+                              });
                         }
-                        console.log(user)
                     })
                     .catch((error) => {
                         const errorCode = error.code;
@@ -73,9 +74,16 @@ const Login = () => {
     };
 
     const handleToggleSignIn = ()=>{
-        SetError('')
+        
         setIsSignedIn(!isSignedIn)
     };
+
+    useEffect(()=>{
+        SetError('')
+        setEmailError("")
+        setPassswordError("")
+        setUserNameError("")
+    },[isSignedIn])
 
     return (
         <div>
@@ -99,7 +107,7 @@ const Login = () => {
                          setUserName(e.target.value)
                          validateUserName(e.target.value,setUserNameError )
                         }} 
-                        type="text" placeholder='Full Name'
+                        type="text" placeholder='User Name'
                         className='p-2 my-2 w-full rounded bg-gray-700' />
                         {userNameError && <span className='text-red-700'>{userNameError}</span>}    
                     </>   
@@ -111,7 +119,7 @@ const Login = () => {
                     setEmail(e.target.value)
                     validateEmail(e.target.value, setEmailError)
                 }} 
-                type="email" placeholder={isSignedIn ? 'Email address' : "UserName"}
+                type="email" placeholder={'Email address'}
                     className='p-2 my-2 w-full rounded bg-gray-700' />
                 {emailError && <span className='text-red-700'>{emailError}</span>}
 

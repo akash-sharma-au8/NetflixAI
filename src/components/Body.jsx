@@ -1,7 +1,8 @@
-import React from 'react'
-import {RouterProvider, createBrowserRouter} from 'react-router-dom'
-import Login from './Login'
-import Browse from './Browse'
+import React, { useDebugValue, useEffect } from 'react';
+import {RouterProvider, createBrowserRouter} from 'react-router-dom';
+import Login from './Login';
+import Browse from './Browse';
+
 
 const Body = () => {
 
@@ -15,6 +16,8 @@ const Body = () => {
       element: <Browse />
     }
   ])
+
+  
 
   return (
     <div>
