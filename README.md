@@ -27,6 +27,7 @@
 -uodate store with trailer video
 -embedded the youtube video
 - tailwind classes to make mainContainer looks good
+- Build secondary container with movie list 
 
 
 # Features
