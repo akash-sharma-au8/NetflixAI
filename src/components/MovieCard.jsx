@@ -4,12 +4,11 @@ import { poster_BASE_URL } from '../utils/constants';
 
 
 const MovieCard = ({movie}) => {
-  console.log(movie)
   const{poster_path, original_title,backdrop_path, id} = movie
 
   // useMoviePoster(id)
   return (
-    <div className='w-44 pr-4 hover:w-60 cursor-pointer transition-all'>
+    <div className='w-44 pr-4 hover:transform cursor-pointer transition-all'>
         <img src = {poster_BASE_URL + poster_path} />
     </div>
   )

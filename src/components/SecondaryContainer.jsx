@@ -9,19 +9,21 @@ const SecondaryContainer = () => {
   const upcomingMovies = useSelector(store => store.movies?.upcomingMovies);
 
   return (
-    <div className='relative bottom-48'> 
-      {nowPlayingMovies.length > 0 && (
-        <MovieList title="Now Playing" movies={nowPlayingMovies} />
-      )}
-      {popularMovies.length > 0 && (
-        <MovieList title="Trending" movies={popularMovies} />
-      )}
-      {topRatedMovies.length > 0 && (
-        <MovieList title="Popular" movies={topRatedMovies} />
-      )}
-      {upcomingMovies.length > 0 && (
-        <MovieList title="Upcoming" movies={upcomingMovies} />
-      )}
+    <div className='bg-black'>
+      <div className='relative -mt-52 z-10'> 
+        {nowPlayingMovies.length > 0 && (
+          <MovieList title="Now Playing" movies={nowPlayingMovies} />
+        )}
+        {popularMovies.length > 0 && (
+          <MovieList title="Trending" movies={popularMovies} />
+        )}
+        {topRatedMovies.length > 0 && (
+          <MovieList title="Popular" movies={topRatedMovies} />
+        )}
+        {upcomingMovies.length > 0 && (
+          <MovieList title="Upcoming" movies={upcomingMovies} />
+        )}
+      </div>
     </div>
   );
 };
